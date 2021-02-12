@@ -184,6 +184,19 @@ public static final String TAG=MainActivity.class.getName();
         }
         byte[] hash = digest.digest(totalData.getBytes(StandardCharsets.UTF_8));
         Log.d(TAG, "Trial 2= "+bytesToHex(hash));
+
+        /**
+         * Trail 3
+         */
+        try {
+            MessageDigest trail_3 = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        byte[] encodedhash = digest.digest(
+                totalData.getBytes(StandardCharsets.UTF_8));
+
+        Log.d(TAG, "onCreate: Trial 3 "+bytesToHex_trial_3(encodedhash));
     }
 
     public static byte[] getSHA(String input) throws NoSuchAlgorithmException
@@ -236,4 +249,23 @@ public static final String TAG=MainActivity.class.getName();
         }
         return new String(hexChars);
     }
+
+    /**
+     * Trial 3
+     * @param hash
+     * @return
+     */
+    private static String bytesToHex_trial_3(byte[] hash) {
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if(hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
+
+
 }
