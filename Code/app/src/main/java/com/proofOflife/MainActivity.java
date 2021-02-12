@@ -163,9 +163,18 @@ public static final String TAG=MainActivity.class.getName();
         try {
             Log.d(TAG, "onCreate: SHA_KEY USING STRING "+toHexString(getSHA(totalData)));
             byte [] converted_256Sha=getSHA(completebyteData);
+            StringBuilder sb = new StringBuilder();
+            for (byte b : converted_256Sha) {
+                sb.append(String.format("%02X ", b));
+            }
+      //      System.out.println(sb.toString());
+
+            Log.d(TAG, "onCreate: CONVERSION TO HEX= "+sb.toString());
+
             String string = new String(converted_256Sha, StandardCharsets.UTF_8);
-            Log.d(TAG, "onCreate: bytes to String= "+string);
-            Log.d(TAG, "onCreate: bytes to HexString= "+bytesToHex(converted_256Sha));
+            Log.d(TAG, "onCreate: bytes to TRAIL 1= "+string);
+            Log.d(TAG, "onCreate: bytes to TRAIL 2= "+bytesToHex(converted_256Sha));
+            Log.d(TAG, "onCreate: bytes to TRAIL 3= "+getHexStringFromByteArray(converted_256Sha,true));
             for (byte eachArray:converted_256Sha) {
               //  Log.d(TAG, "onCreate: Individual Array= "+eachArray);
             }
@@ -183,6 +192,7 @@ public static final String TAG=MainActivity.class.getName();
             e.printStackTrace();
         }
         byte[] hash = digest.digest(totalData.getBytes(StandardCharsets.UTF_8));
+
         Log.d(TAG, "Trial 2= "+bytesToHex(hash));
 
         /**
@@ -265,6 +275,24 @@ public static final String TAG=MainActivity.class.getName();
             hexString.append(hex);
         }
         return hexString.toString();
+    }
+
+
+
+    private static final char[] UPPER_HEX_CHARS = "0123456789ABCDEF".toCharArray();
+    public static String getHexStringFromByteArray(byte[] input, boolean isSpacingRequired) {
+        StringBuilder HexBuilder = new StringBuilder(2 * input.length);
+        for (int i = 0; i < input.length; i++) {
+            HexBuilder.append(UPPER_HEX_CHARS[(input[i] & 0xF0) >> 4]); // Extract Higher Nibble
+            HexBuilder.append(UPPER_HEX_CHARS[(input[i] & 0x0F)]); // Extract Lower Nibble
+
+            if (isSpacingRequired) {
+                if (i != input.length - 1) {
+                    HexBuilder.append(" ");
+                }
+            }
+        }
+        return HexBuilder.toString();
     }
 
 
