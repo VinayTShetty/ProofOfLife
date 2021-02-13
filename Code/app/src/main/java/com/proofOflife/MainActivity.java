@@ -25,7 +25,9 @@ public class MainActivity extends AppCompatActivity {
         String totalData=securityKey+fingerPrintData+timeStamp;
         System.out.println("SHA_KEY TOTAL DATA LENGTH= "+totalData.length());
         try {
-            System.out.println("SHA_KEY "+toHexString(getSHA(totalData)));
+            System.out.println("SHA_KEY Hex Input "+toHexString(getSHA(totalData)));
+            System.out.println("SHA_KEY Text input "+toHexString(getSHAUsingText(totalData)));
+
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -40,6 +42,17 @@ public class MainActivity extends AppCompatActivity {
         // to calculate message digest of an input
         // and return array of byte
         return md.digest(hexStringToByteArray(input));
+    }
+
+    public static byte[] getSHAUsingText(String input) throws NoSuchAlgorithmException
+    {
+        // Static getInstance method is called with hashing SHA
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+        // digest() method called
+        // to calculate message digest of an input
+        // and return array of byte
+        return md.digest(input.getBytes(StandardCharsets.UTF_8));
     }
 
     public static String toHexString(byte[] hash)
